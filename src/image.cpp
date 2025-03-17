@@ -1,6 +1,7 @@
 #include "../include/image.h"
 
-#include <assert.h>
+#include <cmath>
+#include <cassert>
 #include <algorithm>
 
 Image::Image() : m_rows(0), m_cols(0), m_channels(0), m_data(nullptr), m_refCount(nullptr) {
@@ -11,7 +12,7 @@ Image::Image(int rows, int cols, int channels)
     assert(rows > 0 && cols > 0 && channels > 0);
 
     int total = rows * cols * channels;
-    m_data = new unsigned char[total]; // пиксели
+    m_data = new unsigned char[total];
     std::fill(m_data, m_data + total, 0);
     m_refCount = new size_t(1);
     // на данное изображение ссылается 1 объект, когда создается новый объект, который является копией существующего, счетчик увеличивается
@@ -32,7 +33,7 @@ Image::Image(const Image &image)
     : m_rows(image.m_rows), m_cols(image.m_cols), m_channels(image.m_channels), m_data(image.m_data),
       m_refCount(image.m_refCount) {
     if (m_refCount != nullptr) {
-        ++ *m_refCount;
+        ++*m_refCount;
     }
 }
 
@@ -58,20 +59,20 @@ Image &Image::operator=(const Image &image) {
     m_refCount = image.m_refCount;
 
     if (m_refCount != nullptr) {
-        ++(*m_refCount);
+        ++*m_refCount;
     }
     return *this;
 }
 
 Image Image::clone() const {
+    //    return Image(m_rows, m_cols, m_channels, m_data);
     int total = m_rows * m_cols * m_channels;
     unsigned char *newData = new unsigned char[total];
     std::copy(m_data, m_data + total, newData);
     return Image(m_rows, m_cols, m_channels, newData);
 }
 
-
-void Image::copyTo(Image &image) {
+void Image::copyTo(Image &image) const {
     assert(this != &image);
 
     image.release();
@@ -94,14 +95,9 @@ void Image::create(int rows, int cols, int channels) {
     m_channels = channels;
 
     int total = m_rows * m_cols * m_channels;
-    if (total > 0) {
-        m_data = new unsigned char[total];
-        std::fill(m_data, m_data + total, 0);
-        m_refCount = new size_t(1);
-    } else {
-        m_data = nullptr;
-        m_refCount = nullptr;
-    }
+    m_data = new unsigned char[total];
+    std::fill(m_data, m_data + total, 0);
+    m_refCount = new size_t(1);
 }
 
 bool Image::empty() const {
@@ -110,7 +106,7 @@ bool Image::empty() const {
 
 void Image::release() {
     if (m_refCount != nullptr) {
-        -- *m_refCount;
+        --*m_refCount;
         if (*m_refCount == 0) {
             delete[] m_data;
             delete m_refCount;
@@ -123,14 +119,14 @@ void Image::release() {
     m_refCount = nullptr;
 }
 
-Image Image::col(int x) const{
+Image Image::col(int x) const {
     assert(m_refCount != nullptr);
     assert(x >= 0 && x < m_cols);
 
     Image res(m_rows, 1, m_channels);
     unsigned char *resultData = res.data();
-    for (int row = 0; row < m_rows; row++) {
-        for (int channel = 0; channel < m_channels; channel++) {
+    for (int row = 0; row < m_rows; ++row) {
+        for (int channel = 0; channel < m_channels; ++channel) {
             // индекс текущего пикселя в исходном изображении
             int sourceIndex = (row * m_cols + x) * m_channels + channel;
             // индекс текущего пикселя в новом изображении
@@ -141,14 +137,14 @@ Image Image::col(int x) const{
     return res;
 }
 
-Image Image::row(int y) const{
+Image Image::row(int y) const {
     assert(m_refCount != nullptr);
     assert(y >= 0 && y < m_rows);
 
     Image res(1, m_cols, m_channels);
     unsigned char *resultData = res.data();
-    for (int col = 0; col < m_cols; col++) {
-        for (int channel = 0; channel < m_channels; channel++) {
+    for (int col = 0; col < m_cols; ++col) {
+        for (int channel = 0; channel < m_channels; ++channel) {
             int sourceIndex = (y * m_cols + col) * m_channels + channel;
             int resIndex = (0 * m_cols + col) * m_channels + channel;
             resultData[resIndex] = m_data[sourceIndex];
@@ -191,7 +187,6 @@ const unsigned char &Image::at(int index) const {
     return m_data[index];
 }
 
-
 Image Image::zeros(int rows, int cols, int channels) {
     Image res(rows, cols, channels);
     std::fill(res.data(), res.data() + (rows * cols * channels), 0);
@@ -231,15 +226,50 @@ void Image::Mirror(MirrorType type) const {
     }
 }
 
-/*void Image::Rotate(double angle) {
-    assert(m_data != nullptr);
-    while (angle < 0.0) {
-        angle += 360.0;
+void Image::Rotate(double angle) {
+    double normAngle = std::fmod(angle, 360.0);
+    if (normAngle < 0)
+        normAngle += 360.0;
+
+    int turns = std::lround(normAngle / 90.0) % 4;
+    if (turns == 0)
+        return;
+
+    int newRows = m_rows, newCols = m_cols;
+    if (turns == 1 || turns == 3) {
+        newRows = m_cols;
+        newCols = m_rows;
     }
-    while (angle >= 360.0) {
-        angle -= 360.0;
+
+    Image rotated;
+    rotated.create(newRows, newCols, m_channels);
+
+    for (int row = 0; row < m_rows; ++row) {
+        for (int col = 0; col < m_cols; ++col) {
+            int srcIndex = (row * m_cols + col) * m_channels;
+            int newRow = 0, newCol = 0;
+
+            switch (turns) {
+                case 1:
+                    newRow = col;
+                newCol = m_rows - 1 - row;
+                break;
+                case 2:
+                    newRow = m_rows - 1 - row;
+                newCol = m_cols - 1 - col;
+                break;
+                case 3:
+                    newRow = m_cols - 1 - col;
+                newCol = row;
+                break;
+            }
+            int dstIndex = (newRow * newCols + newCol) * m_channels;
+            for (int channel = 0; channel < m_channels; ++channel)
+                rotated.m_data[dstIndex + channel] = m_data[srcIndex + channel];
+        }
     }
-}*/
+    *this = rotated;
+}
 
 size_t Image::countRef() const {
     if (m_refCount) {

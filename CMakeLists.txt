@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 add_subdirectory(googletest)
 
 add_executable(image
-        src/main.cpp
         src/image.cpp
         include/image.h
 )

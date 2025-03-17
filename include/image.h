@@ -24,7 +24,7 @@ public:
     // Вернуть клон изборажения, создает полную копию изображения. Выделяет новую память и производит копирование пикселей. Сложность операции O(n), где n - количество пикселей.
     Image clone() const;
     //Скопировать изображение.
-    void copyTo(Image& image);
+    void copyTo(Image& image) const;
     void create(int rows, int cols, int channels);
     bool empty() const;
 
@@ -50,16 +50,16 @@ public:
     const unsigned char& at(int index) const;
 
 //создает новое изображение, которое инициализируется нулями.
-    Image zeros(int rows, int cols, int channels);
+   static Image zeros(int rows, int cols, int channels);
 
 //создает новое изображение, которое инициализируется значением value.
-    Image values(int rows, int cols, int channels, unsigned char value);
+    static Image values(int rows, int cols, int channels, unsigned char value);
 
     //Отразить изображение по вертикали или по горизонтали
     void Mirror(MirrorType type) const;
 
     //Повернуть на угол кратный 90
-    //void Rotate(double angle);
+    void Rotate(double angle);
 
     //Возвращает текущее количество ссылок на изображение.
     //Т.е. количество объектов, которые ссылаются на данное изображение. Этот метод нужен для unit test'ов.
@@ -71,7 +71,6 @@ private:
     int m_channels;
     unsigned char* m_data; // массив символов изображений
     size_t *m_refCount;
-   // double angle;
 };
 
 #endif //IMAGE_H

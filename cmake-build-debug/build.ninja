@@ -49,13 +49,6 @@ cmake_ninja_workdir = /home/phlor1st/CLionProjects/image/cmake-build-debug/
 
 build cmake_object_order_depends_target_image: phony || .
 
-build CMakeFiles/image.dir/src/main.cpp.o: CXX_COMPILER__image_unscanned_Debug /home/phlor1st/CLionProjects/image/src/main.cpp || cmake_object_order_depends_target_image
-  DEP_FILE = CMakeFiles/image.dir/src/main.cpp.o.d
-  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
-  INCLUDES = -I/home/phlor1st/CLionProjects/image/include
-  OBJECT_DIR = CMakeFiles/image.dir
-  OBJECT_FILE_DIR = CMakeFiles/image.dir/src
-
 build CMakeFiles/image.dir/src/image.cpp.o: CXX_COMPILER__image_unscanned_Debug /home/phlor1st/CLionProjects/image/src/image.cpp || cmake_object_order_depends_target_image
   DEP_FILE = CMakeFiles/image.dir/src/image.cpp.o.d
   FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
@@ -71,7 +64,7 @@ build CMakeFiles/image.dir/src/image.cpp.o: CXX_COMPILER__image_unscanned_Debug 
 #############################################
 # Link the executable image
 
-build image: CXX_EXECUTABLE_LINKER__image_Debug CMakeFiles/image.dir/src/main.cpp.o CMakeFiles/image.dir/src/image.cpp.o
+build image: CXX_EXECUTABLE_LINKER__image_Debug CMakeFiles/image.dir/src/image.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/image.dir
   POST_BUILD = :
