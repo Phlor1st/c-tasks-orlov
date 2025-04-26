@@ -3,41 +3,26 @@
 #include <string>
 #include <vector>
 #include <bits/stdc++.h>
-
+//загрузка и выгрузка лабиринта
 class Labyrinth {
-public:
-    Labyrinth();
-
-    ~Labyrinth();
-
-
-    void initLabyrinth(const std::string &filename);
-
-    int importLabyrinth(const std::string &filename);
-
-    void getHeroPos(int findNum);
-
-    void printLabyrinth();
-
-    void printLabyrinthWithPath();
-
-private:
+protected:
     std::vector<int> labyrinthArr;
     std::queue<int> waveQueue;
+    int arrUsedRows;
+    int arrUsedCols;
 
     int getCell(int row, int col) const;
     void setCell(int row, int col, int value);
+    void getHeroPos(int findNum);
 
-    //Пускаем волны
-    void goWave(int row, int col);
+public:
+    Labyrinth();
+    virtual ~Labyrinth();
 
-    //Ищем выход
-    void findPath(int row, int col);
-
-    int getMaxWave();
-
-    // используемые размеры в массиве, в зависимости от файла
-    int arrUsedRows, arrUsedCols;
+    int importLabyrinth(const std::string &filename);
+    void printLabyrinth();
+    void printLabyrinthWithPath();
+    void solveLabyrinth(const std::string &filename);
 };
 
 #endif

@@ -8,6 +8,9 @@ add_subdirectory(googletest)
 add_executable(labyrinth
         src/main.cpp
         src/labyrinth.cpp
+        src/LabyrinthPathFinder.cpp
+        include/LabyrinthPathFinder.h
+        src/LabyrinthPathFinder.cpp
 )
 
 

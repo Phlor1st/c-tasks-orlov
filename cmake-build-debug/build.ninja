@@ -63,6 +63,13 @@ build CMakeFiles/labyrinth.dir/src/labyrinth.cpp.o: CXX_COMPILER__labyrinth_unsc
   OBJECT_DIR = CMakeFiles/labyrinth.dir
   OBJECT_FILE_DIR = CMakeFiles/labyrinth.dir/src
 
+build CMakeFiles/labyrinth.dir/src/LabyrinthPathFinder.cpp.o: CXX_COMPILER__labyrinth_unscanned_Debug /home/phlor1st/CLionProjects/labyrinth/src/LabyrinthPathFinder.cpp || cmake_object_order_depends_target_labyrinth
+  DEP_FILE = CMakeFiles/labyrinth.dir/src/LabyrinthPathFinder.cpp.o.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -I/home/phlor1st/CLionProjects/labyrinth/include
+  OBJECT_DIR = CMakeFiles/labyrinth.dir
+  OBJECT_FILE_DIR = CMakeFiles/labyrinth.dir/src
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target labyrinth
@@ -71,7 +78,7 @@ build CMakeFiles/labyrinth.dir/src/labyrinth.cpp.o: CXX_COMPILER__labyrinth_unsc
 #############################################
 # Link the executable labyrinth
 
-build labyrinth: CXX_EXECUTABLE_LINKER__labyrinth_Debug CMakeFiles/labyrinth.dir/src/main.cpp.o CMakeFiles/labyrinth.dir/src/labyrinth.cpp.o
+build labyrinth: CXX_EXECUTABLE_LINKER__labyrinth_Debug CMakeFiles/labyrinth.dir/src/main.cpp.o CMakeFiles/labyrinth.dir/src/labyrinth.cpp.o CMakeFiles/labyrinth.dir/src/LabyrinthPathFinder.cpp.o
   FLAGS = -g
   OBJECT_DIR = CMakeFiles/labyrinth.dir
   POST_BUILD = :
