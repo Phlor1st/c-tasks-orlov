@@ -2,13 +2,12 @@
 #define LABYRINTHPATHFINDER_H
 
 #include "labyrinth.h"
-#include <queue>
 
 class LabyrinthPathFinder : public Labyrinth {
 public:
     void goWave(int row, int col);//Пускаем волны
     void findPath(int row, int col);//Ищем выход
-    int getMaxWave();
+    int getMaxWave(); // для метки выхода
     void initSolveLabyrinth(const std::string &filename);
 };
 

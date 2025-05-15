@@ -1,13 +1,14 @@
 #ifndef LABYRINTH_H
 #define LABYRINTH_H
+
 #include <string>
 #include <vector>
-#include <bits/stdc++.h>
+#include <queue>
 //загрузка и выгрузка лабиринта
 class Labyrinth {
 protected:
-    std::vector<int> labyrinthArr;
-    std::queue<int> waveQueue;
+    std::vector<int> labyrinthArr; // массив для карты
+    std::queue<int> waveQueue; // очередь для волнового алгоритма
     int arrUsedRows;
     int arrUsedCols;
 
@@ -16,13 +17,12 @@ protected:
     void getHeroPos(int findNum);
 
 public:
-    Labyrinth();
-    virtual ~Labyrinth();
+    Labyrinth() = default;
+    virtual ~Labyrinth() = default;
 
     int importLabyrinth(const std::string &filename);
     void printLabyrinth();
     void printLabyrinthWithPath();
-    void solveLabyrinth(const std::string &filename);
 };
 
 #endif

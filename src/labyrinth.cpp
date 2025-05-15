@@ -2,13 +2,8 @@
 #include "LabyrinthPathFinder.h"
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include <sstream>
-
-Labyrinth::Labyrinth() : arrUsedRows(0), arrUsedCols(0) {
-}
-
-Labyrinth::~Labyrinth() {
-}
 
 int Labyrinth::getCell(int row, int col) const {
     return labyrinthArr[row * arrUsedCols + col];
@@ -33,7 +28,7 @@ void Labyrinth::getHeroPos(int findNum) {
 int Labyrinth::importLabyrinth(const std::string &filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
-        std::cerr << "Ошибка открытия файла" << std::endl;
+        std::cerr << "fail open file" << std::endl;
         return 1;
     }
 
@@ -43,13 +38,13 @@ int Labyrinth::importLabyrinth(const std::string &filename) {
     int colExpect = -1;
 
     // файл построчно
-    while (getline(file, line)) {
+    while (std::getline(file, line)) {
         std::stringstream ss(line); // используется для создания потока
         std::string cell;
         int colCount = 0;
 
-        while (getline(ss, cell, ' ')) {
-            tempArr.push_back(std::stoi(cell));
+        while (std::getline(ss, cell, ' ')) {
+            tempArr.push_back(std::stoi(cell));//строка в целое число
             ++colCount;
         }
         if (colCount > 0) {
@@ -63,7 +58,7 @@ int Labyrinth::importLabyrinth(const std::string &filename) {
 
     arrUsedRows = rowCount;
     arrUsedCols = colExpect;
-    labyrinthArr = std::move(tempArr);
+    labyrinthArr = tempArr;
     return 0;
 }
 
@@ -90,53 +85,5 @@ void Labyrinth::printLabyrinthWithPath() {
             }
         }
         std::cout << std::endl;
-    }
-}
-
-
-// void Labyrinth::initLabyrinth(const std::string &filename) {
-//     if (importLabyrinth(filename) == 0) {
-//
-//         getHeroPos(2);
-//         if (!waveQueue.empty()) {
-//             int heroIndex = waveQueue.front();
-//             int heroRow = heroIndex / arrUsedCols;
-//             int heroCol = heroIndex % arrUsedCols;
-//             printf("Hero pos: %d:%d\n", heroRow, heroCol);
-//         }
-//         printLabyrinth();
-//
-//         while (!waveQueue.empty()) {
-//             int index = waveQueue.front();
-//             int currRow = index / arrUsedCols;
-//             int currCol = index % arrUsedCols;
-//             goWave(currRow, currCol);
-//         }
-//
-//         getHeroPos(3);
-//         if (!waveQueue.empty()) {
-//             int exitIndex = waveQueue.front();
-//             int exitRow = exitIndex / arrUsedCols;
-//             int exitCol = exitIndex % arrUsedCols;
-//             printf("Exit pos: %d:%d\n", exitRow, exitCol);
-//         }
-//         printLabyrinth();
-//
-//         if (!waveQueue.empty()) {
-//             int exitIndex = waveQueue.front();
-//             int exitRow = exitIndex / arrUsedCols;
-//             int exitCol = exitIndex % arrUsedCols;
-//             findPath(exitRow, exitCol);
-//         }
-//
-//         printf("Exit steps: %lu\n", waveQueue.size() > 0 ? waveQueue.size() - 1 : 0);
-//         printLabyrinthWithPath();
-//     }
-// }
-
-
-void Labyrinth::solveLabyrinth(const std::string &filename) {
-    if (importLabyrinth(filename) == 0) {
-        printLabyrinth();
     }
 }
