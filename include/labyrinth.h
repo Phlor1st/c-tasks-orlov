@@ -6,9 +6,9 @@
 #include <queue>
 //загрузка и выгрузка лабиринта
 class Labyrinth {
-protected:
+public:
     std::vector<int> labyrinthArr; // массив для карты
-    std::queue<int> waveQueue; // очередь для волнового алгоритма
+    std::queue<int> waveQueue; // очередь для волнового, алгоритма не в лабиринте
     int arrUsedRows;
     int arrUsedCols;
 
@@ -16,13 +16,12 @@ protected:
     void setCell(int row, int col, int value);
     void getHeroPos(int findNum);
 
-public:
     Labyrinth() = default;
-    virtual ~Labyrinth() = default;
 
     int importLabyrinth(const std::string &filename);
-    void printLabyrinth();
-    void printLabyrinthWithPath();
+    void printLabyrinth() const;
+    void printLabyrinthWithPath() const;
+    int getMaxWave() const;
 };
 
 #endif

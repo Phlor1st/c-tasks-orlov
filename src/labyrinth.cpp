@@ -62,7 +62,7 @@ int Labyrinth::importLabyrinth(const std::string &filename) {
     return 0;
 }
 
-void Labyrinth::printLabyrinth() {
+void Labyrinth::printLabyrinth() const {
     for (int row = 0; row < arrUsedRows; ++row) {
         for (int col = 0; col < arrUsedCols; ++col) {
             std::cout << std::setw(2) << getCell(row, col) << " ";
@@ -71,7 +71,7 @@ void Labyrinth::printLabyrinth() {
     }
 }
 
-void Labyrinth::printLabyrinthWithPath() {
+void Labyrinth::printLabyrinthWithPath() const {
     for (int row = 0; row < arrUsedRows; ++row) {
         for (int col = 0; col < arrUsedCols; ++col) {
             int posValue = getCell(row, col);
@@ -86,4 +86,14 @@ void Labyrinth::printLabyrinthWithPath() {
         }
         std::cout << std::endl;
     }
+}
+
+int Labyrinth::getMaxWave() const {
+    int maxWave = 0;
+    for (int row = 0; row < arrUsedRows; ++row)
+        for (int col = 0; col < arrUsedCols; ++col) {
+            if (getCell(row, col) > maxWave)
+                maxWave = getCell(row, col);
+        }
+    return maxWave;
 }
